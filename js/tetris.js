@@ -23,7 +23,7 @@ var shapes = [
     //id=2
     [1, 1, 1, 0, 
      0, 0, 1],
-    //id==3
+    //id=3
     [1, 1, 0, 0,
      1, 1],
     //id=4
@@ -46,7 +46,7 @@ var colors  = [
 function newShape(){
     //Math.floor()で切り捨て。idにはshapes内の0~6のランダムな値が入る。
     var id = Math.floor( Math.random() * shapes.length );
-    //idを基にshapesからブロックをとりだす（ id=1だったら[1, 1, 1, 1]などの配列を取り出す）
+    //idを基にshapesからブロックをとりだす（ id=0だったら[1, 1, 1, 1]などの配列を取り出す）
     var shape = shapes[ id ];
     
 //    cl(shape);
@@ -60,10 +60,16 @@ function newShape(){
         for ( var x = 0; x < 4; ++x ){
             //i = 0~15(4 * 4のブロック)
             var i = 4 * y + x;
-            // shape[i]=4 * 4のブロックのいずれか
-            // typeof shape[i] = number
+            //shape[i]=4 * 4のブロックのいずれか
+            //typeof shape[i] = number
+            //1.typeof shape[ i ] != 'undefined'は、値が入っていない時じゃない時（値(number)が入っている時）、
+            //2.また、shape[i]が0じゃない時は、
             if ( typeof shape[ i ] != 'undefined' && shape[ i ] ){
                 //塗りつぶすマス
+                //id=0だと値がないことになってしまうので（マスを塗らないことになってしまうので）1をたす
+                //よって配列にはid+1の数字が入る
+                //また、色については
+                //ctx.fillStyle = colors[ current [ y ][ x ] - 1];とすることで、var colorsの0~6に対応することができる
                 current[ y ][ x ] = id + 1;
             }
             //typeof shape[ i ] == 'undefined' && shape[ i ]だったら
@@ -270,7 +276,7 @@ function newGame(){
     //負けフラッグ
     lose = false; 
      //250ミリ秒ごとにtickという関数を呼び出す
-    interval = setInterval( tick, 250 );
+    interval = setInterval( tick, 500 );
 }
 
 //ゲームを開始する
