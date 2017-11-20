@@ -2,7 +2,7 @@
 var COLS = 10, ROWS = 20;
 //盤面情報（空の配列）
 var board = [];
-//一番上まで行ったかどうか
+//一番上まで行ったかどうか（lose=trueでゲームオーバー）
 var lose;
 //ゲームを実行するタイマーを保持する変数
 var interval;
@@ -14,6 +14,8 @@ var currentX, currentY;
 var cl = console.log;
 
 //ブロックのパターン(id=0~6)
+//0はマスなし、1はマスありとする
+//便宜的に改行することで、4*4の範囲であることをわかりやすくしているとともに、ブロックの形をわかりやすくしている
 var shapes = [
     //id=0
     [1, 1, 1, 1],
@@ -44,23 +46,29 @@ var colors  = [
 
 //ランダムにブロックのパターンを出力し、盤面の一番上へセットする
 function newShape(){
-    //Math.floor()で切り捨て。idにはshapes内の0~6のランダムな値が入る。
+    //Math.floor()で切り捨て。
+    //Math.random()は0〜1未満（0〜0.9999････）の少数を返す
+    //shapes.lengthは7
+    //var idにはshapes内の0~6のランダムな値が入る。
     var id = Math.floor( Math.random() * shapes.length );
-    //idを基にshapesからブロックをとりだす（ id=0だったら[1, 1, 1, 1]などの配列を取り出す）
+    //idを基にshapesからブロックをとりだす（ id=0だったら[1, 1, 1, 1]の配列を取り出す）
     var shape = shapes[ id ];
     
 //    cl(shape);
     
     //パターンを操作ブロックへセットする
-    //空の盤面(4 * 4)をセットする
+    //操作ブロックのための空の盤面（配列）をセットする
     current = [];
+    //y列を0~3の4行と設定
     for ( var y = 0; y < 4; ++y ){
         //y列に空の配列をセットする
         current[ y ] = [];
+        //x行を0~3の4列と設定（ここで4 * 4のブロックと決めている）
         for ( var x = 0; x < 4; ++x ){
             //i = 0~15(4 * 4のブロック)
+            //4マス * y列数 + x
             var i = 4 * y + x;
-            //shape[i]=4 * 4のブロックのいずれか
+            //shape[i]=4 * 4のブロックのいずれか(0~15)
             //typeof shape[i] = number
             //1.typeof shape[ i ] != 'undefined'は、値が入っていない時じゃない時（値(number)が入っている時）、
             //2.また、shape[i]が0じゃない時は、
