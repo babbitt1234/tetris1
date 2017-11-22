@@ -28,10 +28,12 @@ function render(){
     //盤面を描写する
     for ( var x = 0; x < COLS; ++x ){
         for ( var y = 0; y < ROWS; ++y ){
+            //board[ y ][ x ]=0だったらfalseとなるので、次の処理に進む
             if ( board[ y ][ x ] ){
                 //マスの種類に合わせて塗りつぶす色を設定
+                //colors[ board[ y ][ x ] - 1 ]と、最後に-1をすることで、var colorsの配列（0~6）に対応させている
                 ctx.fillStyle = colors[ board[ y ][ x ] - 1 ]; 
-                //マスを描画
+                //色設定後マスを描画
                 drawBlock( x, y ); 
             }
         }
@@ -44,7 +46,7 @@ function render(){
                 //マスの種類に合わせて塗りつぶす色を設定
                 ctx.fillStyle = colors[ current [ y ][ x ] - 1]; 
                 //マスを描画
-                //currentX,currentYは操作ブロックの一番上の座標
+                //currentX,currentYは操作ブロックまでの距離
                 drawBlock( currentX + x, currentY + y ); 
             }
         }

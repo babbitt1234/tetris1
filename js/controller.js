@@ -19,5 +19,6 @@ document.body.onkeydown = function( e ){
     }
     
 //    cl( typeof keys [ e.keyCode ] );
+//    cl(e.keyCode);
     
-};
+}
