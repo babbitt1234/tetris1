@@ -17,8 +17,4 @@ document.body.onkeydown = function( e ){
         //描画処理を行う
         render();
     }
-    
-//    cl( typeof keys [ e.keyCode ] );
-//    cl(e.keyCode);
-    
 }

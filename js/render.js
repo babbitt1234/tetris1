@@ -25,7 +25,7 @@ function render(){
     //strokeStyle = ブロックの線の色
     ctx.strokeStyle = 'black';
     
-    //盤面を描写する
+    //盤面を一つずつ描写する
     for ( var x = 0; x < COLS; ++x ){
         for ( var y = 0; y < ROWS; ++y ){
             //board[ y ][ x ]=0だったらfalseとなるので、次の処理に進む
@@ -39,7 +39,7 @@ function render(){
         }
     }
     
-    //操作ブロックを描画する
+    //操作ブロックを一つずつ描画する
     for ( var y = 0; y < 4; ++y ){
         for  ( var x = 0; x < 4; ++x ){
             if ( current[ y ][ x ] ){

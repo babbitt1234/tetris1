@@ -78,11 +78,7 @@ function newShape(){
                 //よって配列にはid+1の数字が入る
                 //また、色については、
                 //ctx.fillStyle = colors[current [ y ][ x ] - 1];とすることで、var colorsの0~6に対応することができる
-                //なので、あくまでもここでは配列にid+1という数字を入れたにすぎない（ここで色を塗っているわけではない）
                 current[ y ][ x ] = id + 1;
-                
-                //cl(shape[ i ]);
-                
             }
             //typeof shape[ i ] == 'undefined' && shape[ i ]=0だったら
             else {
@@ -91,7 +87,6 @@ function newShape(){
             }
         }
     }
-    
     //ブロックを盤面の一番上にセットする
     currentX = 3;
     currentY = 0;
@@ -103,7 +98,7 @@ function init(){
         //y列に空の配列をセットする
         board[ y ] = [];
         for ( var x = 0; x < COLS; ++x){
-            //全てを0(false)にする（全てのマスにdrawBlock( x, y )をしないようにする）
+            //全てを0(false)にする
             board[ y ][ x ] = 0;
         }
     }
@@ -177,14 +172,14 @@ function clearLines(){
         //y行のマスを左から順(x=0~9)に１つずつチェック
         for ( var x = 0; x < COLS; ++x ){
             if ( board [ y ][ x ] == 0 ){
-                //何もないマス(0)があったら
+                //そのy行に何もないマス(0)があったら
                 rowFilled = false;
                 //break直近のfor文の処理を終わらせ、その行のチェックを止めて一つ上の行のチェックに移る
                 break;
             }
         }
         //もし一行揃ってたら、それらを消す
-        //rowFilled=trueだったら
+        //rowFilled=trueのままだったら
         if ( rowFilled ){
             //その上の行にあったブロックを一つずつ落としていく（yyは一列そろったy列）
             for ( var yy = y; yy > 0; --yy ){
@@ -260,14 +255,15 @@ function valid ( offsetX, offsetY, newCurrent ){
         for ( var x = 0; x < 4; ++x ){
             //newCurrent[0][0]が１以上だったら(falseじゃなかったら)次のif文に進む
             if ( newCurrent [ y ][ x ] ){
-                //縦方向のブロックの長さ[y]+縦方向へのブロックの次の移動先[offsetY]が盤面の範囲外（20番目以降の行)だったら、次のif文に進む
+                //縦方向のブロックの長さ[y]+縦方向へのブロックの次の移動先[offsetY]が盤面の範囲外（20番目以降の行)だったら（配列の外だったら）、次のif文（ゲームオーバー判定）に進む
                 //typeof board [ y + offsetY ] = object
                 //board [ y + offsetY ] = (10) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 if ( typeof board [ y + offsetY ] == 'undefined'
-                    //横方向へのブロックの移動先が盤面外（左端を超えるor右端を超える）だったら次のif文に移動
+                    //横方向へのブロックの移動先が盤面外（左端を超えるor右端を超える）だったら（配列の外だったら）次のif文（ゲームオーバー判定）に移動
                     //typeof board [ y + offsetY ][ x + offsetX ]=number
+                    //board[ y + offsetY ] [ x + offsetX ] = 0
                    || typeof board[ y + offsetY ] [ x + offsetX ] == 'undefined'
-                    //移動先のマス内が0でなく1だったら、そこにはすでにブロックがあるということなので、次のif文に進む
+                    //移動先のマス内が0でなく1だったら、そこにはすでにブロックがあるということなので、次のif文（ゲームオーバーの判定）に進む
                    || board [ y + offsetY ][ x + offsetX ]
                     //横方向の移動先が盤面の左端を越えたら次のif文に進む
                    || x + offsetX < 0
@@ -275,7 +271,7 @@ function valid ( offsetX, offsetY, newCurrent ){
                    || y + offsetY >= ROWS
                     //横方向の移動先が盤面の右端を越えるか、色付きブロックがy+offsetY行目の９番目の列に到着すれば次のif文
                    || x + offsetX >= COLS ){
-                       //上のif文のいずれか1つがtrueで、縦方向への移動量が1、かつ横方向への移動ができなくなった
+                       //上のif文のいずれか1つがtrueで、縦方向への移動量が1、かつ横方向への移動ができなくなった、かつ縦方向への移動が1しかできない
                        if ( offsetY == 1 && offsetX - currentX == 0 && offsetY-currentY == 1){
                            //ブロックが盤面の上に
                            //loseフラッグをtrueにする
@@ -285,6 +281,9 @@ function valid ( offsetX, offsetY, newCurrent ){
                        //終了
                        return false;
                     }
+                
+                 cl(board [ y + offsetY ]);
+                
             }
         }
     }
