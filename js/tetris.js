@@ -241,35 +241,37 @@ function keyPress( key ){
 //ゲームオーバー判定もここで行う
 function valid ( offsetX, offsetY, newCurrent ){
     //||はまたはの意味
-    //このoffsetXは横の移動の距離(-1,0,1のいずれか)
+    //この左のoffsetXは横の移動の距離(-1,0,1のいずれか)
+    //offsetXが0だとfalseになってしまうので、||0としている。
     offsetX = offsetX || 0;
-    //このoffsetYは縦の移動の距離(0,1のいずれか（上にはいかないので-1はなし）)
+    //この左のoffsetYは縦の移動の距離(0,1のいずれか（上にはいかないので-1はなし）)
+    //offsetYが0だとfalseになってしまうので、||0としている。
     offsetY = offsetY || 0;
-    //このoffsetXは次の移動先
+    //この左のoffsetXは次の移動先
     offsetX = currentX + offsetX;
-    //このoffsetYは次の移動先
+    //この左のoffsetYは次の移動先
     offsetY = currentY + offsetY;
-    //newCurrentに、回転後のブロックかそのままのブロックの配列が入る
+    //回転後のブロック(newCurrent)に配列があるか（回転したか）。false（回転しなかったら）だったら、そのままのブロック（current)の配列が入る。
     newCurrent = newCurrent || current;
     for ( var y = 0; y < 4; ++y ){
         for ( var x = 0; x < 4; ++x ){
-            //newCurrent[0][0]が１以上だったら(falseじゃなかったら)次のif文に進む
+            //newCurrent[0][0]が１以上だったら(falseじゃなかったら)
             if ( newCurrent [ y ][ x ] ){
-                //縦方向のブロックの長さ[y]+縦方向へのブロックの次の移動先[offsetY]が盤面の範囲外（20番目以降の行)だったら（配列の外だったら）、次のif文（ゲームオーバー判定）に進む
+                //縦方向のブロックの長さ[y]+縦方向へのブロックの次の移動先[offsetY]が盤面の範囲外（20番目以降の行)だったら（配列の外だったら）
                 //typeof board [ y + offsetY ] = object
                 //board [ y + offsetY ] = (10) [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
                 if ( typeof board [ y + offsetY ] == 'undefined'
-                    //横方向へのブロックの移動先が盤面外（左端を超えるor右端を超える）だったら（配列の外だったら）次のif文（ゲームオーバー判定）に移動
+                    //横方向へのブロックの移動先が盤面外（左端を超えるor右端を超える）だったら（配列の外だったら）
                     //typeof board [ y + offsetY ][ x + offsetX ]=number
                     //board[ y + offsetY ] [ x + offsetX ] = 0
                    || typeof board[ y + offsetY ] [ x + offsetX ] == 'undefined'
-                    //移動先のマス内が0でなく1だったら、そこにはすでにブロックがあるということなので、次のif文（ゲームオーバーの判定）に進む
+                    //移動先のマス内が0でなく1だったら（色のマスがあったら）、
                    || board [ y + offsetY ][ x + offsetX ]
-                    //横方向の移動先が盤面の左端を越えたら次のif文に進む
+                    //横方向の移動先が盤面の左端を越えたら
                    || x + offsetX < 0
-                    //縦方向の移動先が盤面の下端を超えるか、色付きブロックが１９番目の行に到達すれば、次のif文に進む
+                    //縦方向の移動先が盤面の下端を超えるか、色付きブロックが１９番目の行に到達すれば
                    || y + offsetY >= ROWS
-                    //横方向の移動先が盤面の右端を越えるか、色付きブロックがy+offsetY行目の９番目の列に到着すれば次のif文
+                    //横方向の移動先が盤面の右端を越えるか、色付きブロックがy+offsetY行目の９番目の列に到着すれば
                    || x + offsetX >= COLS ){
                        //上のif文のいずれか1つがtrueで、縦方向への移動量が1、かつ横方向への移動ができなくなった、かつ縦方向への移動が1しかできない
                        if ( offsetY == 1 && offsetX - currentX == 0 && offsetY-currentY == 1){
@@ -282,7 +284,7 @@ function valid ( offsetX, offsetY, newCurrent ){
                        return false;
                     }
                 
-                 cl(board [ y + offsetY ]);
+                cl(x + offsetX);
                 
             }
         }
